@@ -1,4 +1,4 @@
-「CardSequence」(https://unityroom.com/games/cardsequence)というゲームのデータです．
+「CardSequence」(https://unityroom.com/games/cardsequence) というゲームのデータです．
 
 使用した音素材：
 OtoLogic(https://otologic.jp)
