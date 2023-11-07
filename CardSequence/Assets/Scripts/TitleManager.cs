@@ -44,6 +44,7 @@ public class TitleManager : MonoBehaviour
         {
             startButton.transform.position = new Vector3(-6, -2, 0);
         }
+        CardListSetup();
     }
 
     void FirstSetup()
@@ -60,7 +61,6 @@ public class TitleManager : MonoBehaviour
         openedEnemyCardPlace = new bool[10] { false, false, false, false, false, false, false, false, false, false };
         battleEnd = true;
         panel.SetActive(false);
-        CardListSetup();
     }
 
     public void CardListSetup()

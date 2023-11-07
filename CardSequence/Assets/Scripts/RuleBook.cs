@@ -5,8 +5,7 @@ using UnityEngine;
 public class RuleBook : MonoBehaviour
 {
 
-    private int playerCommander;
-    private int enemyCommander;
+
     private int[] result;
     private int playerATK;
     private int playerDEF;
@@ -20,8 +19,6 @@ public class RuleBook : MonoBehaviour
 
     private void Start()
     {
-        playerCommander = CommanderNumber(TitleManager.playerDeck);
-        enemyCommander = CommanderNumber(TitleManager.enemyDeck);
         result = new int[2];
         playerATK = 0;
         playerDEF = 0;
@@ -43,6 +40,14 @@ public class RuleBook : MonoBehaviour
         playerArmyAbility = false;
         enemyArmyAbility = false;
 
+        if (player.SubmitCard.Base.Type != Type.Monster && player.SubmitCard.Base.CardID != 200)
+        {
+            PlayerKingEffect(player);
+        }
+        if (enemy.SubmitCard.Base.Type != Type.Monster && enemy.SubmitCard.Base.CardID != 200)
+        {
+            EnemyKingEffect(enemy);
+        }
         if (player.SubmitCard.Base.Type == Type.Army )
         {
             PlayerCommanderEffect(player);
@@ -78,7 +83,7 @@ public class RuleBook : MonoBehaviour
         {
             result = AssassinationEffect(player, enemy);
         }
-        else if (player.SubmitCard.Base.Ability == Ability.Reflection || enemy.SubmitCard.Base.Ability == Ability.Reflection)
+        else if ((player.SubmitCard.Base.Ability == Ability.Reflection && enemy.SubmitCard.Base.CardID != 301) || (enemy.SubmitCard.Base.Ability == Ability.Reflection && player.SubmitCard.Base.CardID != 301))
         {
             result = RefrectionEffect(player, enemy);
         }
@@ -211,6 +216,10 @@ public class RuleBook : MonoBehaviour
         {
             SkeletonEffect(battler, abilityValue);
         }
+        else
+        {
+            DemonKingEffect(battler);
+        }
 
     }
 
@@ -242,12 +251,26 @@ public class RuleBook : MonoBehaviour
         }
     }
 
-    int CommanderNumber(int[] deck)
+    void DemonKingEffect(Battler battler)
+    {
+        if (battler.IsPlayer)
+        {
+            playerATK += CountCardWithType(TitleManager.playerDeck, Type.Monster);
+            battler.SubmitCard.BuffATK(playerATK);
+        }
+        else
+        {
+            enemyATK += CountCardWithType(TitleManager.enemyDeck, Type.Monster);
+            battler.SubmitCard.BuffATK(enemyATK);
+        }
+    }
+
+    int CountCardWithID(int[] deck, int id)
     {
         int count = 0;
         for (int i = 0; i < TitleManager.deckLength; i++)
         {
-            if (deck[i] == 202)
+            if (deck[i] == id)
             {
                 count++;
             }
@@ -255,8 +278,23 @@ public class RuleBook : MonoBehaviour
         return count;
     }
 
+    int CountCardWithType(int[] deck, Type type)
+    {
+        int count = 0;
+        for (int i = 0; i < TitleManager.deckLength; i++)
+        {
+            if (Resources.Load<CardBase>($"Data/{deck[i]}").Type == type)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+
     void PlayerCommanderEffect(Battler battler)
     {
+        int playerCommander = CountCardWithID(TitleManager.playerDeck, 202);
         if (playerCommander > 0)
         {
             playerATK += playerCommander;
@@ -269,11 +307,36 @@ public class RuleBook : MonoBehaviour
 
     void EnemyCommanderEffect(Battler battler)
     {
+        int enemyCommander = CountCardWithID(TitleManager.enemyDeck, 202);
         if (enemyCommander > 0)
         {
             enemyATK += enemyCommander;
             battler.SubmitCard.BuffATK(enemyATK);
             enemyDEF += enemyCommander;
+            battler.SubmitCard.BuffDEF(enemyDEF);
+        }
+    }
+
+    void PlayerKingEffect(Battler battler)
+    {
+        int playerKing = CountCardWithID(TitleManager.playerDeck, 300);
+        if (playerKing > 0)
+        {
+            playerATK += playerKing;
+            battler.SubmitCard.BuffATK(playerATK);
+            playerDEF += playerKing * 2;
+            battler.SubmitCard.BuffDEF(playerDEF);
+        }
+    }
+
+    void EnemyKingEffect(Battler battler)
+    {
+        int enemyKing = CountCardWithID(TitleManager.enemyDeck, 300);
+        if (enemyKing > 0)
+        {
+            enemyATK += enemyKing;
+            battler.SubmitCard.BuffATK(enemyATK);
+            enemyDEF += enemyKing * 2;
             battler.SubmitCard.BuffDEF(enemyDEF);
         }
     }
@@ -348,6 +411,7 @@ public class RuleBook : MonoBehaviour
 
     int[] DirectAttackEffect(Battler player, Battler enemy)
     {
+        int[] result = new int[2];
         if (player.SubmitCard.Base.Ability == Ability.DirectAttack)
         {
             result[0] = playerATK;
@@ -358,6 +422,7 @@ public class RuleBook : MonoBehaviour
         }
         return result;
     }
+
 
 
 
