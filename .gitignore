@@ -72,5 +72,5 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # Images and Audios
-/[Aa]ssets/Audio
-/[Aa]ssets/Images
+/[Aa]ssets/Audio/
+/[Aa]ssets/Images/
