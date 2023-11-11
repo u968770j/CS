@@ -67,21 +67,15 @@ public class Card : MonoBehaviour
 
     public void PointerEnter()
     {
-        transform.position += Vector3.up * 0.1f;
-        transform.localScale = Vector3.one * 1.3f;
+
         GetComponentInChildren<Canvas>().sortingLayerName = "Card";
     }
 
     public void PointerExit()
     {
-        transform.position -= Vector3.up * 0.1f;
-        transform.localScale = Vector3.one;
+
         GetComponentInChildren<Canvas>().sortingLayerName = "Default";
 
     }
 
-    public void ClickCardToBuy()
-    {
-
-    }
 }
