@@ -2,7 +2,7 @@
 
 参考にしたサイト：
 https://youtu.be/jPNkhlDXYOs?feature=shared
-
+https://unitygame.slavesystems.com/unity/?p=112
 
 使用した音素材：
 OtoLogic(https://otologic.jp)
